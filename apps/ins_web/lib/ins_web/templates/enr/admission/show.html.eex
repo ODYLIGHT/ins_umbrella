@@ -1,0 +1,30 @@
+<h2>Show Admission</h2>
+
+<ul>
+
+  <li>
+    <strong>First name:</strong>
+    <%= @admission.first_name %>
+  </li>
+
+  <li>
+    <strong>Last name:</strong>
+    <%= @admission.last_name %>
+  </li>
+
+  <li>
+    <strong>Views:</strong>
+    <%= @admission.views %>
+  </li>
+
+  <li>
+    <strong>Enroller:</strong>
+    <%= enroller_name(@admission) %>
+  </li>
+
+</ul>
+
+</ul>
+
+<span><%= link "Edit", to: enr_admission_path(@conn, :edit, @admission) %></span>
+<span><%= link "Back", to: enr_admission_path(@conn, :index) %></span>

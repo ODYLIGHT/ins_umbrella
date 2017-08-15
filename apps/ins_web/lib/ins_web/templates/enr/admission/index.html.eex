@@ -1,0 +1,31 @@
+<h2>Listing Admissions</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Views</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for admission <- @admissions do %>
+    <tr>
+      <td><%= admission.first_name %></td>
+      <td><%= admission.last_name %></td>
+      <td><%= admission.views %></td>
+      <td><%= enroller_name(admission) %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: enr_admission_path(@conn, :show, admission), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: enr_admission_path(@conn, :edit, admission), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: enr_admission_path(@conn, :delete, admission), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Admission", to: enr_admission_path(@conn, :new) %></span>
