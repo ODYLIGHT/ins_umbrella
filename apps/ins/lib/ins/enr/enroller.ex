@@ -8,7 +8,7 @@ defmodule Ins.ENR.Enroller do
     field :gender, :string
     field :role, :string
     has_many :admissions, Admission
-    belongs_to : :user, Ins.Accounts.User
+    belongs_to :user, Ins.Accounts.User
 
     timestamps()
   end

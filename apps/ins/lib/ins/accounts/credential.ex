@@ -1,6 +1,7 @@
 defmodule Ins.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
+  
   alias Ins.Accounts.{Credential, User}
 
 

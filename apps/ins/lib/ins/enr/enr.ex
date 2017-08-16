@@ -8,10 +8,12 @@ defmodule Ins.ENR do
 
   alias Ins.ENR.Admission
   alias Ins.ENR.Enroller
-
+  alias Ins.ENR.{Admission, Enroller}
+  alias Ins.Accounts
+  
   @doc """
   Returns the list of admissions.
-
+  
   ## Examples
 
       iex> list_admissions()
@@ -56,7 +58,7 @@ defmodule Ins.ENR do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_admission(attrs \\ %{}) do
+  def create_admission(%Enroller{} = enroller, attrs \\ %{}) do
     %Admission{}
     |> Admission.changeset(attrs)
     |> Ecto.Changeset.put_change(:enroller_id, enroller.id)

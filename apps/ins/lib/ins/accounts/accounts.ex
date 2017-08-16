@@ -7,6 +7,7 @@ defmodule Ins.Accounts do
   alias Ins.Repo
 
   alias Ins.Accounts.User
+  alias Ins.Accounts.Credential
 
   @doc """
   Returns the list of users.
@@ -110,7 +111,7 @@ defmodule Ins.Accounts do
     User.changeset(user, %{})
   end
 
-  alias Ins.Accounts.Credential
+  
 
   @doc """
   Returns the list of credentials.
@@ -219,5 +220,5 @@ defmodule Ins.Accounts do
       nil -> {:error, :unauthorized}
     end
   end
-
+  
 end
