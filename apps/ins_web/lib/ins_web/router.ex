@@ -22,6 +22,8 @@ defmodule InsWeb.Router do
 
     resources "/sessions", SessionController, only: [:new, :create, :delete],
                                               singleton: true
+                                              
+    resources "/admissions", AdmissionController, only: [:new, :create, :show]
   end
 
   scope "/enr", InsWeb.ENR, as: :enr do

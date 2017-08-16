@@ -1,0 +1,22 @@
+<h2>Show Admission</h2>
+
+<ul>
+
+  <li>
+    <strong>First name:</strong>
+    <%= @admission.first_name %>
+  </li>
+
+  <li>
+    <strong>Last name:</strong>
+    <%= @admission.last_name %>
+  </li>
+
+  <li>
+    <strong>Views:</strong>
+    <%= @admission.views %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: admission_path(@conn, :edit, @admission) %></span>

@@ -65,7 +65,7 @@ defmodule InsWeb.ENR.AdmissionController do
   end
 
   defp require_existing_enroller(conn, _) do
-    enroller = enr.ensure_enroller_exists(conn.assigns.current_user)
+    enroller = ENR.ensure_enroller_exists(conn.assigns.current_user)
     assign(conn, :current_enroller, enroller)
   end
 

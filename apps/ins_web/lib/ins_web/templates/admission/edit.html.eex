@@ -1,0 +1,4 @@
+<h2>Edit Admission</h2>
+
+<%= render "form.html", Map.put(assigns, :action, admission_path(@conn, :update, @admission)) %>
+
