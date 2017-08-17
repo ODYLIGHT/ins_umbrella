@@ -1,7 +1,7 @@
 defmodule Ins.Admissions.Admission do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Ins.Admissions.Admission
+  alias Ins.Admissions.{Admission, Enroller}
 
 
   schema "admissions" do

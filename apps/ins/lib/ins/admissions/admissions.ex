@@ -7,6 +7,9 @@ defmodule Ins.Admissions do
   alias Ins.Repo
 
   alias Ins.Admissions.Admission
+  alias Ins.Admissions.Enroller
+  alias Ins.Admissions.{Admission, Enroller}
+  alias Ins.Accounts
 
   @doc """
   Returns the list of admissions.
@@ -18,7 +21,9 @@ defmodule Ins.Admissions do
 
   """
   def list_admissions do
-    Repo.all(Admission)
+    Admission
+    |> Repo.all()
+    |> Repo.preload(enroller: [user: :credential])
   end
 
   @doc """
@@ -35,7 +40,11 @@ defmodule Ins.Admissions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_admission!(id), do: Repo.get!(Admission, id)
+  def get_admission!(id) do
+    Admission
+    |> Repo.get!(id)
+    |> Repo.preload(enroller: [user: :credential])
+  end
 
   @doc """
   Creates a admission.
@@ -49,10 +58,23 @@ defmodule Ins.Admissions do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_admission(attrs \\ %{}) do
+  def create_admission(%Enroller{} = enroller, attrs \\ %{}) do
     %Admission{}
     |> Admission.changeset(attrs)
+    |> Ecto.Changeset.put_change(:enroller_id, enroller.id)
     |> Repo.insert()
+  end
+
+  def ensure_enroller_exists(%Accounts.User{} = user) do
+    %Enroller{user_id: user.id}
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.unique_constraint(:user_id)
+    |> Repo.insert()
+    |> handle_existing_enroller()
+  end
+  defp handle_existing_enroller({:ok, enroller}), do: enroller
+  defp handle_existing_enroller({:error, changeset}) do
+    Repo.get_by!(Enroller, user_id: changeset.data.user_id)
   end
 
   @doc """
@@ -100,5 +122,105 @@ defmodule Ins.Admissions do
   """
   def change_admission(%Admission{} = admission) do
     Admission.changeset(admission, %{})
+  end
+
+  
+
+  @doc """
+  Returns the list of enrollers.
+
+  ## Examples
+
+      iex> list_enrollers()
+      [%Enroller{}, ...]
+
+  """
+  def list_enrollers do
+    Repo.all(Enroller)
+  end
+
+  @doc """
+  Gets a single enroller.
+
+  Raises `Ecto.NoResultsError` if the Enroller does not exist.
+
+  ## Examples
+
+      iex> get_enroller!(123)
+      %Enroller{}
+
+      iex> get_enroller!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_enroller!(id) do
+    Enroller
+    |> Repo.get!(id)
+    |> Repo.preload(user: :credential)
+  end
+
+  @doc """
+  Creates a enroller.
+
+  ## Examples
+
+      iex> create_enroller(%{field: value})
+      {:ok, %Enroller{}}
+
+      iex> create_enroller(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_enroller(attrs \\ %{}) do
+    %Enroller{}
+    |> Enroller.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a enroller.
+
+  ## Examples
+
+      iex> update_enroller(enroller, %{field: new_value})
+      {:ok, %Enroller{}}
+
+      iex> update_enroller(enroller, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_enroller(%Enroller{} = enroller, attrs) do
+    enroller
+    |> Enroller.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Enroller.
+
+  ## Examples
+
+      iex> delete_enroller(enroller)
+      {:ok, %Enroller{}}
+
+      iex> delete_enroller(enroller)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_enroller(%Enroller{} = enroller) do
+    Repo.delete(enroller)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking enroller changes.
+
+  ## Examples
+
+      iex> change_enroller(enroller)
+      %Ecto.Changeset{source: %Enroller{}}
+
+  """
+  def change_enroller(%Enroller{} = enroller) do
+    Enroller.changeset(enroller, %{})
   end
 end

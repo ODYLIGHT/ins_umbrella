@@ -66,4 +66,66 @@ defmodule Ins.AdmissionsTest do
       assert %Ecto.Changeset{} = Admissions.change_admission(admission)
     end
   end
+
+  describe "enrollers" do
+    alias Ins.Admissions.Enroller
+
+    @valid_attrs %{gender: "some gender", role: "some role"}
+    @update_attrs %{gender: "some updated gender", role: "some updated role"}
+    @invalid_attrs %{gender: nil, role: nil}
+
+    def enroller_fixture(attrs \\ %{}) do
+      {:ok, enroller} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Admissions.create_enroller()
+
+      enroller
+    end
+
+    test "list_enrollers/0 returns all enrollers" do
+      enroller = enroller_fixture()
+      assert Admissions.list_enrollers() == [enroller]
+    end
+
+    test "get_enroller!/1 returns the enroller with given id" do
+      enroller = enroller_fixture()
+      assert Admissions.get_enroller!(enroller.id) == enroller
+    end
+
+    test "create_enroller/1 with valid data creates a enroller" do
+      assert {:ok, %Enroller{} = enroller} = Admissions.create_enroller(@valid_attrs)
+      assert enroller.gender == "some gender"
+      assert enroller.role == "some role"
+    end
+
+    test "create_enroller/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Admissions.create_enroller(@invalid_attrs)
+    end
+
+    test "update_enroller/2 with valid data updates the enroller" do
+      enroller = enroller_fixture()
+      assert {:ok, enroller} = Admissions.update_enroller(enroller, @update_attrs)
+      assert %Enroller{} = enroller
+      assert enroller.gender == "some updated gender"
+      assert enroller.role == "some updated role"
+    end
+
+    test "update_enroller/2 with invalid data returns error changeset" do
+      enroller = enroller_fixture()
+      assert {:error, %Ecto.Changeset{}} = Admissions.update_enroller(enroller, @invalid_attrs)
+      assert enroller == Admissions.get_enroller!(enroller.id)
+    end
+
+    test "delete_enroller/1 deletes the enroller" do
+      enroller = enroller_fixture()
+      assert {:ok, %Enroller{}} = Admissions.delete_enroller(enroller)
+      assert_raise Ecto.NoResultsError, fn -> Admissions.get_enroller!(enroller.id) end
+    end
+
+    test "change_enroller/1 returns a enroller changeset" do
+      enroller = enroller_fixture()
+      assert %Ecto.Changeset{} = Admissions.change_enroller(enroller)
+    end
+  end
 end

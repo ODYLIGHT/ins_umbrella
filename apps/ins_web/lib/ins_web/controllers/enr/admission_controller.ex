@@ -57,7 +57,7 @@ defmodule InsWeb.ENR.AdmissionController do
 
   def delete(conn, %{"id" => id}) do
     admission = ENR.get_admission!(id)
-    {:ok, _admission} = ENR.delete_admission(conn.assigns.  admission)
+    {:ok, _admission} = ENR.delete_admission(conn.assigns.admission)
 
     conn
     |> put_flash(:info, "Admission deleted successfully.")
